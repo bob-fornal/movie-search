@@ -21,11 +21,8 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-builders/custom-webpack:browser",
-            "options": {
-              "customWebpackConfig": {
-              "path": "./custom-webpack.config.js"
-            },
+          "builder": "@angular/build:application",
+          "options": {
             "browser": "src/main.ts",
             "polyfills": [
               "zone.js"
