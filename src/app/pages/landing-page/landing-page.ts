@@ -113,16 +113,19 @@ export class LandingPage {
 
   convertDate(date: string | undefined) {
     if (date === undefined) return 'unknown';
+    if (date === null) return 'unknown';
+
     const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEPT', 'OCT', 'NOV', 'DEC'];
     const year: string = date.substring(0, 4);
     const month: string = date.substring(5, 7);
     const day: string = date.substring(8, 10);
-    console.log(date, year, month, day);
     return [day, months[+month - 1], year].join(' ');
   }
 
   convertIsoDuration(isoString: string | undefined): string {
     if (isoString === undefined) return 'unknown';
+    if (isoString === null) return 'unknown';
+
     const hoursMatch = isoString.match(/(\d+)H/);
     const minutesMatch = isoString.match(/(\d+)M/);
     
@@ -142,6 +145,8 @@ export class LandingPage {
 
   convertGenres(genres: Array<GenreDetail> | undefined): string {
     if (genres === undefined) return 'unknown';
+    if (genres === null) return 'unknown';
+
     const parts: Array<string> = [];
     genres.forEach((genre: GenreDetail) => {
       parts.push(genre.title);
