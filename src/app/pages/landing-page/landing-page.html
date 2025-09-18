@@ -1,5 +1,9 @@
 <div class="page-wrapper">
+  <div class="page-header">
+    <img class="banner" src="/banner.webp" alt="Bob Fornal's Movie Search" />
+  </div>
 
+  <div class="page-content">
   <div class="filter">
     <div class="title">Genre Filter</div>
       @if (selectedGenre !== null) {
@@ -38,8 +42,38 @@
         </div>
       }
     </div>
-  <div class="content">
-    Content
-  </div>
+    <div class="content">
+      <div class="movie-selection">
+        <div class="selection">
+          Page {{ 1 }} of {{ movies.totalPages }}
+        </div>
+        <div class="movie-card-wrapper">
+          <div class="movie-cards">
+            @for (movie of movies.data; track movie.id) {
+              <div
+                class="movie-card"
+                [class.selected]="movie.id === selectedMovie?.id"
+                (click)="selectMovie(movie)"
+              >
+                {{ movie.title }}
+              </div>
+            }
+          </div>
+        </div>
+      </div>
 
+      <div class="movie-information">
+        @if (selectedMovie === null) {
+          <div>No movie selected.</div>
+        } @else {
+          <img class="poster" [src]="getMovieAvatar(selectedMovie)" [alt]="selectedMovie.title" />
+
+          <div class="movie-data">
+            {{ selectedMovie?.title }}
+          </div>
+        }
+      </div>
+    </div>
+
+  </div>
 </div>
