@@ -18,8 +18,11 @@ As a user:
 
 To do:
 
-- [ ] Build out API service to get auth and make first call for data.
+- [ ] Build out API service (REST) to get auth and make the calls for data.
+- [ ] Build out API service (GraphQL) to get auth and make the calls for data.
 - [ ] Build out frontend search (by title only?).
 - [ ] Build out frontend retrieve and filter by genre (paged?).
 - [ ] Add page navigation of results with position and totals.
 - [ ] Build out frontend cards to display notable information based on results.
+- [ ] Loading Spinner
+- [ ] Unit Tests

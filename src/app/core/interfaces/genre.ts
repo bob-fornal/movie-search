@@ -8,5 +8,5 @@ export interface GenreItem {
 export interface Genre {
   data: Array<GenreItem>;
   totalPages: number;
-  page: number;
+  pages: Array<number>;
 }

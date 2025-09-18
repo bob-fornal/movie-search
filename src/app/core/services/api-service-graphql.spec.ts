@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ApiService } from './api-service';
+import { ApiServiceGraphql } from './api-service-graphql';
 
-describe('ApiService', () => {
-  let service: ApiService;
+describe('ApiServiceGraphql', () => {
+  let service: ApiServiceGraphql;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(ApiService);
+    service = TestBed.inject(ApiServiceGraphql);
   });
 
   it('should be created', () => {

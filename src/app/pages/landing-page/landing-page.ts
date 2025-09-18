@@ -1,7 +1,7 @@
-import { Component, effect, inject, OnInit } from '@angular/core';
+import { Component, effect, inject } from '@angular/core';
 
-import { ApiService } from '../../core/services/api-service';
-import { Genre } from '../../core/interfaces/genre';
+import { ApiServiceRest } from '../../core/services/api-service-rest';
+import { Genre, GenreItem } from '../../core/interfaces/genre';
 
 @Component({
   selector: 'app-landing-page',
@@ -9,25 +9,50 @@ import { Genre } from '../../core/interfaces/genre';
   templateUrl: './landing-page.html',
   styleUrl: './landing-page.css'
 })
-export class LandingPage implements OnInit {
-  public apiService: ApiService = inject(ApiService);
+export class LandingPage {
+  private useRest: boolean = true;
+  private apiServiceRest: ApiServiceRest = inject(ApiServiceRest);
 
-  public genre: Genre = this.apiService.EMPTY_GENRE;
+  private activeService = this.useRest ? this.apiServiceRest : this.apiServiceRest;
+
+  public genre: Genre = this.activeService.EMPTY_GENRE;
+  public selectedGenre: GenreItem | null = null;
   
   constructor() {
     effect(this.handleGenreChange.bind(this));
     this.init();
   }
 
-  ngOnInit() {
-  }
-
-  private async init() {
-    await this.apiService.getGenres();
+  private init() {
+    this.activeService.getGenres();
   }
 
   private handleGenreChange(): void {
-    this.genre = this.apiService.sharedGenre();
+    this.genre = this.activeService.sharedGenre();
     console.log(this.genre);
+  }
+
+  isSelected(item: GenreItem): boolean {
+    if (this.selectedGenre === null) return false;
+    return this.selectedGenre?.id === item.id
+  }
+
+  isDisabled(item: GenreItem): boolean {
+    if (this.selectedGenre === null) return false;
+    return this.selectedGenre?.id !== item.id
+  }
+
+  toggleFilterItem(item: GenreItem): void {
+    if (this.selectedGenre !== null) return;
+    this.selectedGenre = item;
+  }
+
+  clearFilterItem(): void {
+    this.selectedGenre = null;
+  }
+
+  loadMoreGenre(): void {
+    const nextPage: number = this.genre.pages.length + 1;
+    this.activeService.getGenres(nextPage);
   }
 }

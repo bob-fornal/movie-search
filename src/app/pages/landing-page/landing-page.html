@@ -1,1 +1,45 @@
-<p>landing-page works!</p>
+<div class="page-wrapper">
+
+  <div class="filter">
+    <div class="title">Genre Filter</div>
+      @if (selectedGenre !== null) {
+        <div class="clear-button">
+          <mat-icon>keyboard_arrow_left</mat-icon>
+          <button matButton class="link-button" (click)="clearFilterItem()">Clear</button>
+        </div>
+      }
+      @for (item of genre.data; track item.id;) {
+        <div class="filter-item" (click)="toggleFilterItem(item)">
+          <label
+            class="filter-item-checkbox"
+            [class.selected]="isSelected(item)"
+            [class.disabled]="isDisabled(item)"
+          >
+            <input type="checkbox" style="display: none;">
+            @if (isSelected(item)) {
+              <mat-icon class="material-symbols-filled mat-ligature-font">check_box</mat-icon>
+            } @else {
+              <mat-icon>check_box_outline_blank</mat-icon>
+            }
+          </label>
+           <span
+            class="filter-item-label"
+            [class.selected]="isSelected(item)"
+            [class.disabled]="isDisabled(item)"
+          >
+            {{ item.title }} ({{ item.movies.length }})
+          </span>
+        </div>
+      }
+      @if (genre.pages.length < genre.totalPages) {
+        <div class="see-more-button">
+          <mat-icon>keyboard_arrow_down</mat-icon>
+          <button matButton class="link-button" (click)="loadMoreGenre()">See more</button>
+        </div>
+      }
+    </div>
+  <div class="content">
+    Content
+  </div>
+
+</div>
