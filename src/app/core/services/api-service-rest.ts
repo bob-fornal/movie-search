@@ -10,7 +10,7 @@ import { MovieDetail, MovieItem, Movies } from '../interfaces/movies';
   providedIn: 'root'
 })
 export class ApiServiceRest {
-  private API_ENDPOINT: string = environment.API_ENDPOINT;
+  private API_ENDPOINT: string = 'https://0kadddxyh3.execute-api.us-east-1.amazonaws.com'; // environment.API_ENDPOINT;
   private bearerToken: string = '';
 
   readonly EMPTY_GENRE: Genre = {
