@@ -1,4 +1,9 @@
-import { MovieId } from "./movie";
+import { MovieId } from "./movies";
+
+export interface GenreDetail {
+  id: string;
+  title: string;
+}
 
 export interface GenreItem {
   id: string;

@@ -2,11 +2,26 @@
 
 This is an implementation of a Movie Search.
 
-## Highlight something in your project that you thought was especially interesting or significant to your overall implementation.
+## Interesting or significant to my overall implementation.
 
-## Tell us what you are most pleased or proud of with your implementation.
+* It was interesting seeing the REST and GraphQL implementations that I could work with on this project.
+* Standalone versus a non-Standalone implementation. I haven't had much call to delve into Standalone with Angular, but recently have been working on a security improvement where lazy-loading wasn't used for speed; it was used for security.
+* Minimizing abstractions that could be used if this project scaled larger.
+* I love that I can nest CSS and don't need the SCSS implemented on the project.
 
-## Given more time, what next feature or improvement would you like to add to your project?
+## Pleased or proud of with my implementation.
+
+* Error Handling on images. I first used a function to handle the absence of an image. I later added the field to those records missing the field in the API service. Later, I found images that didn't exist and implemented an `(error)` handler to the process.
+
+## Next feature or improvement to the project/
+
+### Test Coverage
+
+Given the time that I allowed myself, a comprehensive suite of Unit Tests, Integration Tests, Automated Tests, and Smoke Tests are not feasible.
+
+### Automation Pipeline
+
+Given the time that I allowed myself, I opted for Vercel's pipeline for simplicity.
 
 As a user:
 

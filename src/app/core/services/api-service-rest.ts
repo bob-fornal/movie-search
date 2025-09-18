@@ -4,7 +4,7 @@ import { environment } from '../../../environments/environment.development';
 
 import { Genre } from '../interfaces/genre';
 import { Token } from '../interfaces/token';
-import { Movies } from '../interfaces/movies';
+import { MovieDetail, MovieItem, Movies } from '../interfaces/movies';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +25,7 @@ export class ApiServiceRest {
   readonly EMPTY_MOVIES: Movies = {
     data: [],
     totalPages: 1,
+    page: 1,
   };
   private moviesLimit: number = 50;
   private _sharedMovies = signal<Movies>({ ...this.EMPTY_MOVIES });
@@ -79,7 +80,9 @@ export class ApiServiceRest {
           'Authorization': `Bearer ${this.bearerToken}`,
         },
       });
-      movies = await result.json();
+      const items: any = await result.json();
+      const adjustedMovies = this.adjustMovies(items.data);
+      movies = { ...items, data: adjustedMovies, page };
     } catch (error) {
       console.log(error);
       this._sharedMovies.set({ ...this.EMPTY_MOVIES })
@@ -98,11 +101,21 @@ export class ApiServiceRest {
           'Authorization': `Bearer ${this.bearerToken}`,
         },
       });
-      const movie: any = await result.json();
+      const movie: MovieDetail = await result.json();
       return movie;
     } catch (error) {
       console.log(error);
       return null;
     }
+  }
+
+  private adjustMovies(movies: Array<MovieItem>): Array<MovieItem> {
+    const adjusted: Array<MovieItem> = [...movies];
+    adjusted.forEach((movie: MovieItem) => {
+      if (!movie.hasOwnProperty('posterUrl')) {
+        movie.posterUrl = '/default_poster.webp';
+      }
+    });
+    return adjusted;
   }
 }

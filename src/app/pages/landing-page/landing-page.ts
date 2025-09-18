@@ -1,8 +1,8 @@
 import { Component, effect, inject } from '@angular/core';
 
 import { ApiServiceRest } from '../../core/services/api-service-rest';
-import { Genre, GenreItem } from '../../core/interfaces/genre';
-import { MovieItem, Movies } from '../../core/interfaces/movies';
+import { Genre, GenreDetail, GenreItem } from '../../core/interfaces/genre';
+import { MovieDetail, MovieItem, Movies } from '../../core/interfaces/movies';
 
 @Component({
   selector: 'app-landing-page',
@@ -21,6 +21,7 @@ export class LandingPage {
 
   public movies: Movies = this.activeService.EMPTY_MOVIES;
   public selectedMovie: MovieItem | null = null;
+  public selectedMovieAdditionalDetail: MovieDetail | null = null;
   
   constructor() {
     effect(this.handleGenreChange.bind(this));
@@ -70,14 +71,81 @@ export class LandingPage {
     this.activeService.getGenres(nextPage);
   }
 
-  getMovieAvatar(movie: MovieItem): string {
-    if (movie.hasOwnProperty('posterUrl')) return movie.posterUrl!;
-    return '/default_poster.webp';
+  handleImgError(event: any) {
+    event.target.src = '/default_poster.webp';
   }
 
   async selectMovie(movie: MovieItem): Promise<void> {
     this.selectedMovie = movie;
-    const additional = await this.activeService.getIndividualMovieData(movie.id);
-    console.log(additional);
+    const additionalDetail = await this.activeService.getIndividualMovieData(movie.id);
+    this.selectedMovieAdditionalDetail = additionalDetail;
+  }
+
+  navigateToPage(direction: string): void {
+    let page: number = this.movies.page;
+
+    switch (direction) {
+      case 'first':
+        if (page === 1) return;
+        page = 1;
+        break;
+      case 'previous':
+        if (page === 1) return;
+        page = page - 1;
+        break;
+      case 'next':
+        if (page === this.movies.totalPages) return;
+        page = page + 1;
+        break;
+      case 'last':
+        if (page === this.movies.totalPages) return;
+        page = this.movies.totalPages;
+        break;
+    }
+    this.fireRequestChange(page);
+  }
+
+  fireRequestChange(page: number = 1): void {
+    const search: string = '';
+    const genre: string = '';
+    this.activeService.getMovies(search, genre, page);
+  }
+
+  convertDate(date: string | undefined) {
+    if (date === undefined) return 'unknown';
+    const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEPT', 'OCT', 'NOV', 'DEC'];
+    const year: string = date.substring(0, 4);
+    const month: string = date.substring(5, 7);
+    const day: string = date.substring(8, 10);
+    console.log(date, year, month, day);
+    return [day, months[+month - 1], year].join(' ');
+  }
+
+  convertIsoDuration(isoString: string | undefined): string {
+    if (isoString === undefined) return 'unknown';
+    const hoursMatch = isoString.match(/(\d+)H/);
+    const minutesMatch = isoString.match(/(\d+)M/);
+    
+    const hours = hoursMatch ? parseInt(hoursMatch[1]) : 0;
+    const minutes = minutesMatch ? parseInt(minutesMatch[1]) : 0;
+    
+    const parts: Array<string> = [];
+    if (hours > 0) {
+      parts.push(`${hours}h`);
+    }
+    if (minutes > 0) {
+      parts.push(`${minutes}m`);
+    }
+    
+    return parts.join(' ');
+  }
+
+  convertGenres(genres: Array<GenreDetail> | undefined): string {
+    if (genres === undefined) return 'unknown';
+    const parts: Array<string> = [];
+    genres.forEach((genre: GenreDetail) => {
+      parts.push(genre.title);
+    });
+    return parts.join(', ');
   }
 }

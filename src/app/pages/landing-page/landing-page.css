@@ -117,9 +117,28 @@
 }
 
 .movie-selection {
+  width: 40%;
 
   .selection {
     margin-bottom: 1em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .selection-button {
+      --mat-icon-color: blue;
+
+      &:hover {
+        font-weight: bold;
+        cursor: pointer;
+      }
+    }
+
+    .content {
+      display: inline-block;
+      width: 50%;
+      text-align: center;
+    }
   }
 }
 .movie-card-wrapper {
@@ -150,5 +169,20 @@
 
   .poster {
     height: 450px;
+    border: 2px solid #333333;
+  }
+}
+
+.movie-data {
+
+  .movie-title {
+    font-size: 1.2em;
+    border-bottom: 1px solid black;
+    margin-bottom: 0.5em;
+  }
+
+  .detail-title {
+    font-weight: bold;
+    margin-right: 0.5em;
   }
 }

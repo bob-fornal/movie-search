@@ -1,3 +1,9 @@
+import { GenreDetail } from "./genre";
+
+export interface MovieId {
+  id: string;
+}
+
 export interface MovieItem {
   id: string;
   title: string;
@@ -8,4 +14,18 @@ export interface MovieItem {
 export interface Movies {
   data: Array<MovieItem>;
   totalPages: number;
+  page: number;
 };
+
+export interface MovieDetail {
+  bestRating: number;
+  datePublished: string;
+  directors: Array<string>;
+  duration: string;
+  genres: Array<GenreDetail>;
+  id: string;
+  mainActors: Array<string>;
+  ratingValue: 6.9;
+  title: string;
+  worstRating: number;
+}
