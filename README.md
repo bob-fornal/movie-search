@@ -1,59 +1,43 @@
-# MovieSearch
+# Movie Search Implementation
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.2.1.
+This is an implementation of a Movie Search.
 
-## Development server
+## Interesting or significant to my overall implementation.
 
-To start a local development server, run:
+* It was interesting seeing the REST and GraphQL implementations that I could work with on this project.
+* Standalone versus a non-Standalone implementation. I haven't had much call to delve into Standalone with Angular, but recently have been working on a security improvement where lazy-loading wasn't used for speed; it was used for security.
+* Minimizing abstractions that could be used if this project scaled larger.
+* I love that I can nest CSS and don't need the SCSS implemented on the project.
 
-```bash
-ng serve
-```
+## Pleased or proud of with my implementation.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+* Error Handling on images. I first used a function to handle the absence of an image. I later added the field to those records missing the field in the API service. Later, I found images that didn't exist and implemented an `(error)` handler to the process.
 
-## Code scaffolding
+## Next feature or improvement to the project/
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Test Coverage
 
-```bash
-ng generate component component-name
-```
+Given the time that I allowed myself, a comprehensive suite of Unit Tests, Integration Tests, Automated Tests, and Smoke Tests are not feasible.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Automation Pipeline
 
-```bash
-ng generate --help
-```
+Given the time that I allowed myself, I opted for Vercel's pipeline for simplicity.
 
-## Building
+As a user:
 
-To build the project run:
+- [ ] I can search for movies and see a paginated list of results.
+- [ ] I can filter search results by genre.
+- [ ] I can navigate through the next and previous pages of the paginated results.
+- [ ] I see the total count of search results.
+- [ ] I see notable information for each search result, such as the summary, poster, duration, rating, etc.
 
-```bash
-ng build
-```
+To do:
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- [ ] Build out API service (REST) to get auth and make the calls for data.
+- [ ] Build out API service (GraphQL) to get auth and make the calls for data.
+- [ ] Build out frontend search (by title only?).
+- [ ] Build out frontend retrieve and filter by genre (paged?).
+- [ ] Add page navigation of results with position and totals.
+- [ ] Build out frontend cards to display notable information based on results.
+- [ ] Loading Spinner
+- [ ] Unit Tests
