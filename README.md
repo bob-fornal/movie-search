@@ -27,9 +27,9 @@ As a user:
 
 - [ ] I can search for movies and see a paginated list of results.
 - [ ] I can filter search results by genre.
-- [ ] I can navigate through the next and previous pages of the paginated results.
+- [x] I can navigate through the next and previous pages of the paginated results.
 - [ ] I see the total count of search results.
-- [ ] I see notable information for each search result, such as the summary, poster, duration, rating, etc.
+- [x] I see notable information for each search result, such as the summary, poster, duration, rating, etc.
 
 To do:
 
@@ -37,7 +37,7 @@ To do:
 - [ ] Build out API service (GraphQL) to get auth and make the calls for data.
 - [ ] Build out frontend search (by title only?).
 - [ ] Build out frontend retrieve and filter by genre (paged?).
-- [ ] Add page navigation of results with position and totals.
+- [x] Add page navigation of results with position and totals.
 - [ ] Build out frontend cards to display notable information based on results.
 - [ ] Loading Spinner
 - [ ] Unit Tests

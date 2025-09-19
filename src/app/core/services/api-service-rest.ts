@@ -4,7 +4,7 @@ import { environment } from '../../../environments/environment.development';
 
 import { Genre } from '../interfaces/genre';
 import { Token } from '../interfaces/token';
-import { MovieDetail, MovieItem, Movies } from '../interfaces/movies';
+import { MovieDetail, MovieItem, Movies, MovieTitles } from '../interfaces/movies';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +30,15 @@ export class ApiServiceRest {
   private moviesLimit: number = 50;
   private _sharedMovies = signal<Movies>({ ...this.EMPTY_MOVIES });
   readonly sharedMovies = this._sharedMovies.asReadonly();
+
+  readonly EMPTY_MOVIE_TITLES: MovieTitles = {
+    data: [],
+    totalPages: 1,
+    page: 1,
+  }
+  private movieTitleLimit: number = 50;
+  private _sharedTitles = signal<MovieTitles>({ ...this.EMPTY_MOVIE_TITLES });
+  readonly sharedTitles = this._sharedTitles.asReadonly();
 
   private async setBearerToken(): Promise<void> {
     const path: string = `${this.API_ENDPOINT}/auth/token`;
@@ -68,6 +77,35 @@ export class ApiServiceRest {
     this._sharedGenre.set({ ...currentData });
   }
 
+  public async getMovieTitles() {
+    if (this.bearerToken === '') await this.setBearerToken();
+
+    let titles: MovieTitles = { ...this.EMPTY_MOVIES };
+    try {
+      let page: number = 1;
+      do {
+        const path: string = `${this.API_ENDPOINT}/movies/titles?page=${page}&limit=${this.moviesLimit}`;
+        const result: any = await fetch(path, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${this.bearerToken}`,
+          },
+        });
+        const items: any = await result.json();
+        titles.page = page;
+        titles.totalPages = items.totalPages;
+        titles.data.push(...items.data);
+        page = page + 1;
+      } while (page < titles.totalPages);
+    } catch (error) {
+      console.log(error);
+      this._sharedTitles.set({ ...this.EMPTY_MOVIE_TITLES })
+      return;
+    }
+    
+    this._sharedTitles.set({ ...titles });
+  }
+
   public async getMovies(search = '', genre = '', page: number = 1): Promise<void> {
     if (this.bearerToken === '') await this.setBearerToken();
 
@@ -83,6 +121,48 @@ export class ApiServiceRest {
       const items: any = await result.json();
       const adjustedMovies = this.adjustMovies(items.data);
       movies = { ...items, data: adjustedMovies, page };
+    } catch (error) {
+      console.log(error);
+      this._sharedMovies.set({ ...this.EMPTY_MOVIES })
+      return;
+    }
+    
+    this._sharedMovies.set({ ...movies });
+  }
+
+  public async findMovieGroup(id: string): Promise<void> {
+    if (this.bearerToken === '') await this.setBearerToken();
+    console.log('finding', id);
+
+    let movies: Movies = { ...this.EMPTY_MOVIES };
+    try {
+      let page: number = 1;
+      let totalPages: number = 1;
+      let titleFound: boolean = false;
+      do {
+        const path: string = `${this.API_ENDPOINT}/movies?page=${page}&limit=${this.moviesLimit}`;
+        const result: any = await fetch(path, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${this.bearerToken}`,
+          },
+        });
+        const items: any = await result.json();
+        totalPages = items.totalPages;
+        for (let i = 0, len = items.data.length; i < len; i++) {
+          if (items.data[i].id === id) {
+            titleFound = true;
+            break;
+          }
+        }
+        if (titleFound === true) {
+          const adjustedMovies = this.adjustMovies(items.data);
+          movies = { ...items, data: adjustedMovies, page }; 
+        } else {
+          page = page + 1;
+        }
+        console.log('---', page, totalPages, titleFound, page < totalPages || titleFound === false);
+      } while (page < totalPages && titleFound === false);
     } catch (error) {
       console.log(error);
       this._sharedMovies.set({ ...this.EMPTY_MOVIES })

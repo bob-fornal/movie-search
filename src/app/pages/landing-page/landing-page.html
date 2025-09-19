@@ -44,12 +44,26 @@
     </div>
     <div class="content">
       <div class="movie-selection">
+        <div class="available-records">
+          {{ titles.data.length }} movies available
+        </div>
         <div class="selection">
           <mat-icon class="selection-button" (click)="navigateToPage('first')">first_page</mat-icon>
           <mat-icon class="selection-button" (click)="navigateToPage('previous')">chevron_left</mat-icon>
-          <span class="content">Page {{ movies.page }} of {{ movies.totalPages }}</span>
+          <span class="selection-content">Page {{ movies.page }} of {{ movies.totalPages }}</span>
           <mat-icon class="selection-button" (click)="navigateToPage('next')">chevron_right</mat-icon>
           <mat-icon class="selection-button" (click)="navigateToPage('last')">last_page</mat-icon>
+        </div>
+        <div class="search-selection">
+          <mat-form-field class="search-field">
+            <mat-label>Select a movie</mat-label>
+            <mat-select [(value)]="selectedTitleId" (valueChange)="selectTitle($event)">
+              <mat-option [value]="null">None</mat-option>
+              @for (item of titles.data; track item.id) {
+                <mat-option [value]="item.id">{{ item.title }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
         </div>
         <div class="movie-card-wrapper">
           <div class="movie-cards">

@@ -9,6 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list'
+import { MatSelectModule } from '@angular/material/select';
 
 import { LandingPage } from './pages/landing-page/landing-page';
 
@@ -26,6 +27,7 @@ import { LandingPage } from './pages/landing-page/landing-page';
     MatCheckboxModule,
     MatIconModule,
     MatListModule,
+    MatSelectModule,
   ],
   providers: [
     provideBrowserGlobalErrorListeners()
