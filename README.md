@@ -4,15 +4,16 @@ This is an implementation of a Movie Search.
 
 ## Interesting or significant to my overall implementation.
 
-* It was interesting seeing the REST and GraphQL implementations that I could work with on this project.
-* Standalone versus a non-Standalone implementation. I haven't had much call to delve into Standalone with Angular, but recently have been working on a security improvement where lazy-loading wasn't used for speed; it was used for security.
-* Minimizing abstractions that could be used if this project scaled larger.
-* I opted to search using a SELECT field (since I captured the full list of titles). This allows me to find the list of records and set the selected movie.
+* **REST and GraphQL** implementations that I could work with on this project.
+* **Standalone** versus a **non-Standalone** implementation: I haven't had much call to delve into Standalone with Angular, but recently have been working on a security improvement where lazy-loading wasn't used for speed; it was used for security.
+* Minimizing **abstractions** that could be used if this project scaled larger.
+* I opted to **search using a SELECT component** (since I captured the full list of titles). This allows me to find the list of records and set the selected movie.
 * I love that I can nest CSS and don't need the SCSS implemented on the project.
 
 ## Pleased or proud of with my implementation.
 
 * Error Handling on images. I first used a function to handle the absence of an image. I later added the field to those records missing the field in the API service. Later, I found images that didn't exist and implemented an `(error)` handler to the process.
+* Use of a clear pattern for Genre Filtering.
 
 ## Next feature or improvement to the project/
 
