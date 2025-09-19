@@ -2,7 +2,7 @@ import { Component, effect, inject } from '@angular/core';
 
 import { ApiServiceRest } from '../../core/services/api-service-rest';
 import { Genre, GenreDetail, GenreItem } from '../../core/interfaces/genre';
-import { MovieDetail, MovieItem, Movies, MovieTitle, MovieTitles } from '../../core/interfaces/movies';
+import { MovieDetail, MovieId, MovieItem, Movies, MovieTitle, MovieTitles } from '../../core/interfaces/movies';
 
 @Component({
   selector: 'app-landing-page',
@@ -23,7 +23,8 @@ export class LandingPage {
   public selectedMovie: MovieItem | null = null;
   public selectedMovieAdditionalDetail: MovieDetail | null = null;
 
-  public titles: MovieTitles = this.activeService.EMPTY_MOVIE_TITLES;
+  private titles: MovieTitles = this.activeService.EMPTY_MOVIE_TITLES;
+  public filteredTitles: MovieTitles = this.activeService.EMPTY_MOVIE_TITLES;
   public selectedTitleId: string | null = null;
   
   constructor() {
@@ -39,32 +40,38 @@ export class LandingPage {
     await this.activeService.getMovieTitles();
   }
 
+  getTitlesLength(): number {
+    return this.titles.data.length;
+  }
+
   private handleGenreChange(): void {
     this.genre = this.activeService.sharedGenre();
-    console.log(this.genre);
   }
 
   private handleMovieChange(): void {
     this.movies = this.activeService.sharedMovies();
-    console.log(this.movies);
     if (this.movies.data.length > 0) {
       const index: number = this.selectedTitleId === null
         ? 0
         : this.getIndexOfSelectedTitle();
-      console.log(index);
       this.selectMovie(this.movies.data[index]);
     }
   }
 
+  public getDisplayTitlesData() {
+    if (this.selectedGenre === null) return this.titles.data;
+    return this.selectedGenre.movies;
+  }
+
   private getIndexOfSelectedTitle(): number {
     return this.movies.data.findIndex((value: MovieItem) => {
-      console.log(value, this.selectedTitleId);
       return value.id === this.selectedTitleId;
     });
   }
 
   private handleTitleChange(): void {
-    this.titles = this.activeService.sharedTitles();
+    this.titles = { ...this.activeService.sharedTitles() };
+    this.filteredTitles = { ...this.activeService.sharedTitles() };
   }
 
   isSelected(item: GenreItem): boolean {
@@ -77,13 +84,41 @@ export class LandingPage {
     return this.selectedGenre?.id !== item.id
   }
 
-  toggleFilterItem(item: GenreItem): void {
+  async toggleFilterItem(item: GenreItem): Promise<void> {
     if (this.selectedGenre !== null) return;
+
+    this.selectedMovie = null;
     this.selectedGenre = item;
+    await this.activeService.getMovies('', item.title, 1);
+    this.setFilteredTitles(item.movies);
+  }
+
+  setFilteredTitles(movies: Array<MovieId>): void {
+    const titles: Array<MovieTitle> = [];
+    movies.forEach((item: MovieId) => {
+      const match = this.titles.data.find((title: MovieTitle) => item.id === title.id);
+      if (match) {
+        titles.push({
+          id: match!.id,
+          title: match!.title,
+        });
+      }
+    });
+    titles.sort((a: MovieTitle, b: MovieTitle): number => {
+      const titleA: string = a.title.toLowerCase();
+      const titleB: string = b.title.toLowerCase();
+
+      if (titleA < titleB) return -1;
+      if (titleB < titleA) return 1;
+      return 0;
+    });
+    this.filteredTitles.data = [...titles];
   }
 
   clearFilterItem(): void {
     this.selectedGenre = null;
+    this.filteredTitles = { ...this.titles };
+    this.activeService.getMovies();
   }
 
   loadMoreGenre(): void {
@@ -105,7 +140,6 @@ export class LandingPage {
     if (id === null) {
       this.activeService.getMovies();
     } else {
-      this.clearFilterItem();
       const needToFind: boolean = this.isMovieListed(id);
       if (needToFind === true) {
         this.activeService.findMovieGroup(id);

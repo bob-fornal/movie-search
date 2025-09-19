@@ -19,7 +19,6 @@
             [class.selected]="isSelected(item)"
             [class.disabled]="isDisabled(item)"
           >
-            <input type="checkbox" style="display: none;">
             @if (isSelected(item)) {
               <mat-icon class="material-symbols-filled mat-ligature-font">check_box</mat-icon>
             } @else {
@@ -45,14 +44,19 @@
     <div class="content">
       <div class="movie-selection">
         <div class="available-records">
-          {{ titles.data.length }} movies available
+          @if (selectedGenre === null) {
+            {{ filteredTitles.data.length }}
+          } @else {
+            {{ selectedGenre.movies.length }} of {{ getTitlesLength() }}
+          }
+          <span>movies available</span>
         </div>
         <div class="search-selection">
           <mat-form-field class="search-field">
             <mat-label>Select a movie</mat-label>
             <mat-select [(value)]="selectedTitleId" (valueChange)="selectTitle($event)">
               <mat-option [value]="null">None</mat-option>
-              @for (item of titles.data; track item.id) {
+              @for (item of filteredTitles.data; track item.id) {
                 <mat-option [value]="item.id">{{ item.title }}</mat-option>
               }
             </mat-select>

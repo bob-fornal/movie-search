@@ -2,7 +2,7 @@ import { Injectable, signal } from '@angular/core';
 
 import { environment } from '../../../environments/environment.development';
 
-import { Genre } from '../interfaces/genre';
+import { Genre, GenreItem } from '../interfaces/genre';
 import { Token } from '../interfaces/token';
 import { MovieDetail, MovieItem, Movies, MovieTitles } from '../interfaces/movies';
 
@@ -39,6 +39,8 @@ export class ApiServiceRest {
   private movieTitleLimit: number = 50;
   private _sharedTitles = signal<MovieTitles>({ ...this.EMPTY_MOVIE_TITLES });
   readonly sharedTitles = this._sharedTitles.asReadonly();
+  private _filteredTitles = signal<MovieTitles>({ ...this.EMPTY_MOVIE_TITLES });
+  readonly filteredTitles = this._filteredTitles.asReadonly();
 
   private async setBearerToken(): Promise<void> {
     const path: string = `${this.API_ENDPOINT}/auth/token`;
@@ -49,6 +51,7 @@ export class ApiServiceRest {
 
   public async getGenres(page: number = 1): Promise<void> {
     if (this.bearerToken === '') await this.setBearerToken();
+    
     const currentData: Genre = { ...this.sharedGenre() };
     if (page > currentData.totalPages) return;
 
@@ -61,7 +64,9 @@ export class ApiServiceRest {
           'Authorization': `Bearer ${this.bearerToken}`,
         },
       });
-      genres = await result.json();
+      const items = await result.json()
+      items.data = this.adjustGenre(items.data);
+      genres = items;
     } catch (error) {
       console.log(error);
       this._sharedGenre.set({ ...this.EMPTY_GENRE });
@@ -74,7 +79,13 @@ export class ApiServiceRest {
       currentData.totalPages = genres.totalPages;
     }
 
+    this.getMovieData(currentData.data)
+
     this._sharedGenre.set({ ...currentData });
+  }
+
+  private getMovieData(data: Array<GenreItem>): void {
+    data.forEach((item: GenreItem) => {})
   }
 
   public async getMovieTitles() {
@@ -84,7 +95,7 @@ export class ApiServiceRest {
     try {
       let page: number = 1;
       do {
-        const path: string = `${this.API_ENDPOINT}/movies/titles?page=${page}&limit=${this.moviesLimit}`;
+        const path: string = `${this.API_ENDPOINT}/movies/titles?page=${page}&limit=${this.movieTitleLimit}`;
         const result: any = await fetch(path, {
           method: 'GET',
           headers: {
@@ -99,10 +110,12 @@ export class ApiServiceRest {
       } while (page < titles.totalPages);
     } catch (error) {
       console.log(error);
-      this._sharedTitles.set({ ...this.EMPTY_MOVIE_TITLES })
+      this._filteredTitles.set({ ...this.EMPTY_MOVIE_TITLES });
+      this._sharedTitles.set({ ...this.EMPTY_MOVIE_TITLES });
       return;
     }
-    
+
+    this._filteredTitles.set({ ...titles });
     this._sharedTitles.set({ ...titles });
   }
 
@@ -198,4 +211,16 @@ export class ApiServiceRest {
     });
     return adjusted;
   }
+
+
+  private adjustGenre(data: Array<GenreItem>): Array<GenreItem> {
+    const unduplicated = [...new Set(data)];
+    return unduplicated.filter(item => item !== null && item !== undefined);
+  }
+
+
+  private isObjectNotEmpty(object: any): boolean {
+  if (typeof object !== 'object' || object === null) return false;
+  return Object.keys(object).length > 0;
+}
 }

@@ -27,17 +27,17 @@ Given the time that I allowed myself, I opted for Vercel's pipeline for simplici
 As a user:
 
 - [x] I can search for movies and see a paginated list of results.
-- [ ] I can filter search results by genre.
+- [x] I can filter search results by genre.
 - [x] I can navigate through the next and previous pages of the paginated results.
 - [x] I see the total count of search results.
 - [x] I see notable information for each search result, such as the summary, poster, duration, rating, etc.
 
 To do:
 
-- [ ] Build out API service (REST) to get auth and make the calls for data.
+- [x] Build out API service (REST) to get auth and make the calls for data.
 - [ ] Build out API service (GraphQL) to get auth and make the calls for data.
 - [x] Build out frontend search (by title only - SELECT).
-- [ ] Build out frontend retrieve and filter by genre (paged?).
+- [x] Build out frontend retrieve and filter by genre (paged).
 - [x] Add page navigation of results with position and totals.
 - [x] Build out frontend cards to display notable information based on results.
 - [ ] Loading Spinner
