@@ -29,3 +29,14 @@ export interface MovieDetail {
   title: string;
   worstRating: number;
 }
+
+export interface MovieTitles {
+  data: Array<MovieTitle>;
+  totalPages: number;
+  page: number;
+};
+
+export interface MovieTitle {
+  id: string;
+  title: string;
+}

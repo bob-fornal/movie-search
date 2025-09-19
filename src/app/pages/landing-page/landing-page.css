@@ -119,6 +119,10 @@
 .movie-selection {
   width: 40%;
 
+  .available-records {
+    text-align: center;
+  }
+
   .selection {
     margin-bottom: 1em;
     display: flex;
@@ -134,15 +138,22 @@
       }
     }
 
-    .content {
+    .selection-content {
       display: inline-block;
       width: 50%;
       text-align: center;
     }
   }
+
+  .search-selection {
+
+    .search-field {
+      width: 100%;
+    }
+  }
 }
 .movie-card-wrapper {
-  height: calc(100vh - 14em);
+  height: calc(100vh - 19em);
   overflow-y: scroll;
   padding-right: 1em
 }
