@@ -84,49 +84,10 @@
         </div>
       </div>
 
-      <div class="movie-information">
-        @if (selectedMovie === null) {
-          <div>No movie selected.</div>
-        } @else {
-          <img
-            class="poster"
-            [src]="selectedMovie.posterUrl"
-            [alt]="selectedMovie.title"
-            (error)="handleImgError($event)"
-          />
-
-          <div class="movie-data">
-            <div class="movie-title">
-              <span class="detail-title">Title:</span>
-              <span class="detail-content">{{ selectedMovie.title }}</span>
-            </div>
-            <div class="movie-date-published">
-              <span class="detail-title">Published:</span>
-              <span class="detail-content">{{ convertDate(selectedMovieAdditionalDetail?.datePublished) }}</span>
-            </div>
-            <div class="movie-date-directors">
-              <span class="detail-title">Directors:</span>
-              <span class="detail-content">{{ (selectedMovieAdditionalDetail?.directors || []).join(', ') }}</span>
-            </div>
-            <div class="movie-date-duration">
-              <span class="detail-title">Duration:</span>
-              <span class="detail-content">{{ convertIsoDuration(selectedMovieAdditionalDetail?.duration) }}</span>
-            </div>
-            <div class="movie-date-genres">
-              <span class="detail-title">Genres:</span>
-              <span class="detail-content">{{ convertGenres(selectedMovieAdditionalDetail?.genres) }}</span>
-            </div>
-            <div class="movie-date-actors">
-              <span class="detail-title">Main Actors:</span>
-              <span class="detail-content">{{ (selectedMovieAdditionalDetail?.mainActors || []).join(', ') }}</span>
-            </div>
-            <div class="movie-date-published">
-              <span class="detail-title">Rating:</span>
-              <span class="detail-content">{{ selectedMovieAdditionalDetail?.ratingValue }}</span>
-            </div>
-          </div>
-        }
-      </div>
+      <movie-display-component
+        [selectedMovie]="selectedMovie"
+        [additionalDetail]="selectedMovieAdditionalDetail"
+      ></movie-display-component>
     </div>
 
   </div>

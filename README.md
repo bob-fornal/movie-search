@@ -17,6 +17,18 @@ This is an implementation of a Movie Search.
 
 ## Next feature or improvement to the project/
 
+### Landing Page Abstractions
+
+Additionally, there wound up being more logic in the component than I would prefer. Some of this (setting the filtered titles when a Genre is selected for example) should be moved out of the component.
+
+There are a few places here where abstracting would clean up the overall presentation and management of the project, such as the display of the movie information (I did abstract this one to showcase the cleaner code and ability to shift logic out to make the structure more readable). These shifts are necessary for readability and management of the project over time.
+
+### Filter & Search
+
+The Search & Filter portions should be abstracted out into a component/service approach. This will cleanly allow the system to trigger calls for new or updated data to be displayed.
+
+This is an area that can get "out-of-hand" if not approached properly. I opted for a simple inline approach; will improve this part.
+
 ### Test Coverage
 
 Given the time that I allowed myself, a comprehensive suite of Unit Tests, Integration Tests, Automated Tests, and Smoke Tests are not feasible.
@@ -24,6 +36,16 @@ Given the time that I allowed myself, a comprehensive suite of Unit Tests, Integ
 ### Automation Pipeline
 
 Given the time that I allowed myself, I opted for Vercel's pipeline for simplicity.
+
+### HttpInterceptor for Spinner
+
+I used a straight service-based approach for the management of the spinner. This can be enhanced with an HttpInterceptor. For simplicity, I left this out but do want to explore the functional-based approach. This is one of the few cases where we have choices in the Angular framework tooling.
+
+### Implement Improved Selection Tool
+
+The selection tool is a simple select. This should be improved to allow the user to search via input, allowing the dropdown to adjust based on what is entered.
+
+## My Notes & Goals
 
 As a user:
 
@@ -36,10 +58,10 @@ As a user:
 To do:
 
 - [x] Build out API service (REST) to get auth and make the calls for data.
-- [ ] Build out API service (GraphQL) to get auth and make the calls for data.
 - [x] Build out frontend search (by title only - SELECT).
 - [x] Build out frontend retrieve and filter by genre (paged).
 - [x] Add page navigation of results with position and totals.
 - [x] Build out frontend cards to display notable information based on results.
-- [ ] Loading Spinner
+- [x] Loading Spinner
+- [ ] Build out API service (GraphQL) to get auth and make the calls for data.
 - [ ] Unit Tests

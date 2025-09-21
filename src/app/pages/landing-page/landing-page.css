@@ -166,34 +166,7 @@
   }
 
   &.selected {
-    color: green;
+    color: var(--selection-color);
     font-weight: bold;
-  }
-}
-
-.movie-information {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1em;
-  width: 100%;
-
-  .poster {
-    height: 450px;
-    border: 2px solid #333333;
-  }
-}
-
-.movie-data {
-
-  .movie-title {
-    font-size: 1.2em;
-    border-bottom: 1px solid black;
-    margin-bottom: 0.5em;
-  }
-
-  .detail-title {
-    font-weight: bold;
-    margin-right: 0.5em;
   }
 }

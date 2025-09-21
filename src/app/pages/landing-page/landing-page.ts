@@ -1,8 +1,15 @@
 import { Component, effect, inject } from '@angular/core';
 
 import { ApiServiceRest } from '../../core/services/api-service-rest';
-import { Genre, GenreDetail, GenreItem } from '../../core/interfaces/genre';
-import { MovieDetail, MovieId, MovieItem, Movies, MovieTitle, MovieTitles } from '../../core/interfaces/movies';
+import { Genre, GenreItem } from '../../core/interfaces/genre';
+import {
+  MovieDetail,
+  MovieId,
+  MovieItem,
+  Movies,
+  MovieTitle,
+  MovieTitles
+} from '../../core/interfaces/movies';
 
 @Component({
   selector: 'app-landing-page',
@@ -11,9 +18,9 @@ import { MovieDetail, MovieId, MovieItem, Movies, MovieTitle, MovieTitles } from
   styleUrl: './landing-page.css'
 })
 export class LandingPage {
-  private useRest: boolean = true;
   private apiServiceRest: ApiServiceRest = inject(ApiServiceRest);
 
+  private useRest: boolean = true;
   private activeService = this.useRest ? this.apiServiceRest : this.apiServiceRest;
 
   public genre: Genre = this.activeService.EMPTY_GENRE;
@@ -26,7 +33,7 @@ export class LandingPage {
   private titles: MovieTitles = this.activeService.EMPTY_MOVIE_TITLES;
   public filteredTitles: MovieTitles = this.activeService.EMPTY_MOVIE_TITLES;
   public selectedTitleId: string | null = null;
-  
+
   constructor() {
     effect(this.handleGenreChange.bind(this));
     effect(this.handleMovieChange.bind(this));
@@ -126,10 +133,6 @@ export class LandingPage {
     this.activeService.getGenres(nextPage);
   }
 
-  handleImgError(event: any) {
-    event.target.src = '/default_poster.webp';
-  }
-
   async selectMovie(movie: MovieItem): Promise<void> {
     this.selectedMovie = movie;
     const additionalDetail = await this.activeService.getIndividualMovieData(movie.id);
@@ -189,48 +192,5 @@ export class LandingPage {
     const search: string = '';
     const genre: string = '';
     this.activeService.getMovies(search, genre, page);
-  }
-
-  convertDate(date: string | undefined) {
-    if (date === undefined) return 'unknown';
-    if (date === null) return 'unknown';
-
-    const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEPT', 'OCT', 'NOV', 'DEC'];
-    const year: string = date.substring(0, 4);
-    const month: string = date.substring(5, 7);
-    const day: string = date.substring(8, 10);
-    return [day, months[+month - 1], year].join(' ');
-  }
-
-  convertIsoDuration(isoString: string | undefined): string {
-    if (isoString === undefined) return 'unknown';
-    if (isoString === null) return 'unknown';
-
-    const hoursMatch = isoString.match(/(\d+)H/);
-    const minutesMatch = isoString.match(/(\d+)M/);
-    
-    const hours = hoursMatch ? parseInt(hoursMatch[1]) : 0;
-    const minutes = minutesMatch ? parseInt(minutesMatch[1]) : 0;
-    
-    const parts: Array<string> = [];
-    if (hours > 0) {
-      parts.push(`${hours}h`);
-    }
-    if (minutes > 0) {
-      parts.push(`${minutes}m`);
-    }
-    
-    return parts.join(' ');
-  }
-
-  convertGenres(genres: Array<GenreDetail> | undefined): string {
-    if (genres === undefined) return 'unknown';
-    if (genres === null) return 'unknown';
-
-    const parts: Array<string> = [];
-    genres.forEach((genre: GenreDetail) => {
-      parts.push(genre.title);
-    });
-    return parts.join(', ');
   }
 }

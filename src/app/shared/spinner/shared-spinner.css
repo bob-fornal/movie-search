@@ -1,0 +1,18 @@
+.spinner-overlay {
+  background-color: rgba(100, 100, 100, 0.8);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10000;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .gears {
+    width: 300px;
+    height: 300px;
+  }
+}
