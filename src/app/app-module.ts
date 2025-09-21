@@ -12,11 +12,15 @@ import { MatListModule } from '@angular/material/list'
 import { MatSelectModule } from '@angular/material/select';
 
 import { LandingPage } from './pages/landing-page/landing-page';
+import { SharedSpinner } from './shared/spinner/shared-spinner';
+import { MovieDisplayComponent } from './shared/movie-display-component/movie-display-component';
 
 @NgModule({
   declarations: [
     App,
     LandingPage,
+    SharedSpinner,
+    MovieDisplayComponent,
   ],
   imports: [
     BrowserModule,
@@ -30,7 +34,7 @@ import { LandingPage } from './pages/landing-page/landing-page';
     MatSelectModule,
   ],
   providers: [
-    provideBrowserGlobalErrorListeners()
+    provideBrowserGlobalErrorListeners(),
   ],
   bootstrap: [App]
 })

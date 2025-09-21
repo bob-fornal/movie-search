@@ -12,4 +12,6 @@ body {
   --lighter-gray-background-color: #eeeeee;
   --light-gray-background-color: #dddddd;
   --dark-gray-background-color: #999999;
+
+  --selection-color: #891448;
 }

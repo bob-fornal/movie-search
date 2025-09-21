@@ -1,15 +1,16 @@
-import { Injectable, signal } from '@angular/core';
-
-import { environment } from '../../../environments/environment.development';
+import { inject, Injectable, signal } from '@angular/core';
 
 import { Genre, GenreItem } from '../interfaces/genre';
 import { Token } from '../interfaces/token';
 import { MovieDetail, MovieItem, Movies, MovieTitles } from '../interfaces/movies';
+import { SpinnerService } from './spinner-service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiServiceRest {
+  private spinnerService: SpinnerService = inject(SpinnerService);
+
   private API_ENDPOINT: string = 'https://0kadddxyh3.execute-api.us-east-1.amazonaws.com'; // environment.API_ENDPOINT;
   private bearerToken: string = '';
 
@@ -43,13 +44,16 @@ export class ApiServiceRest {
   readonly filteredTitles = this._filteredTitles.asReadonly();
 
   private async setBearerToken(): Promise<void> {
+    this.spinnerService.show();
     const path: string = `${this.API_ENDPOINT}/auth/token`;
     const result: any = await fetch(path);
     const json: Token = await result.json();
     this.bearerToken = json.token;
+    this.spinnerService.hide();
   }
 
   public async getGenres(page: number = 1): Promise<void> {
+    this.spinnerService.show();
     if (this.bearerToken === '') await this.setBearerToken();
     
     const currentData: Genre = { ...this.sharedGenre() };
@@ -79,16 +83,12 @@ export class ApiServiceRest {
       currentData.totalPages = genres.totalPages;
     }
 
-    this.getMovieData(currentData.data)
-
     this._sharedGenre.set({ ...currentData });
-  }
-
-  private getMovieData(data: Array<GenreItem>): void {
-    data.forEach((item: GenreItem) => {})
+    this.spinnerService.hide();
   }
 
   public async getMovieTitles() {
+    this.spinnerService.show();
     if (this.bearerToken === '') await this.setBearerToken();
 
     let titles: MovieTitles = { ...this.EMPTY_MOVIES };
@@ -117,9 +117,11 @@ export class ApiServiceRest {
 
     this._filteredTitles.set({ ...titles });
     this._sharedTitles.set({ ...titles });
+    this.spinnerService.hide();
   }
 
   public async getMovies(search = '', genre = '', page: number = 1): Promise<void> {
+    this.spinnerService.show();
     if (this.bearerToken === '') await this.setBearerToken();
 
     let movies: Movies = { ...this.EMPTY_MOVIES };
@@ -141,11 +143,12 @@ export class ApiServiceRest {
     }
     
     this._sharedMovies.set({ ...movies });
+    this.spinnerService.hide();
   }
 
   public async findMovieGroup(id: string): Promise<void> {
+    this.spinnerService.show();
     if (this.bearerToken === '') await this.setBearerToken();
-    console.log('finding', id);
 
     let movies: Movies = { ...this.EMPTY_MOVIES };
     try {
@@ -183,9 +186,11 @@ export class ApiServiceRest {
     }
     
     this._sharedMovies.set({ ...movies });
+    this.spinnerService.hide();
   }
 
   public async getIndividualMovieData(id: string): Promise<any> {
+    this.spinnerService.show();
     try {
       const path: string = `${this.API_ENDPOINT}/movies/${id}`;
       const result: any = await fetch(path, {
@@ -195,12 +200,16 @@ export class ApiServiceRest {
         },
       });
       const movie: MovieDetail = await result.json();
+      this.spinnerService.hide();
       return movie;
     } catch (error) {
       console.log(error);
+      this.spinnerService.hide();
       return null;
     }
   }
+
+  // internal functionality
 
   private adjustMovies(movies: Array<MovieItem>): Array<MovieItem> {
     const adjusted: Array<MovieItem> = [...movies];
