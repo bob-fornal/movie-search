@@ -27,6 +27,7 @@ To do:
 - [ ] Build out API service (GraphQL) to get auth and make the calls for data.
 - [ ] Unit Tests
 - [ ] Automation Pipeline with Integration, Smoke, and Automated Tests.
+- [ ] Make the application responsive (mobile ready).
 - [ ] Spinner Interceptor
 
 ## Interesting or significant to my overall implementation.
@@ -43,6 +44,10 @@ To do:
 * Use of a clear pattern for Genre Filtering. I've always liked the implementation that Amazon uses and have tried to implement a similar pattern where it fits for clients.
 
 ## Next feature or improvement to the project/
+
+### Responsive Design
+
+Make the application mobile ready. In know this wasn't one of my requirements, but I wanted to showcase what I had done to my wife and only had my phone. It worked in landscape mode, mostly.
 
 ### Environment Variable Handling
 
